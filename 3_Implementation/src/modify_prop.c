@@ -1,41 +1,49 @@
-#include"funs.h"
-#include"stdlib.h"
+#include "funs.h"
 
-void display_type_prop()
+void modify_prop()
 {
-    size= sizeof(u);
-    system("cls");
-    char ruser_ptype[20];
-    char another='y';
+    size = sizeof(u);
 
-    while(another=='y')
+    char ruser_name[20];
+    char another = 'y';
+
+    while (another == 'y')
     {
-        fptr=fopen("udata.txt","rb");
-        if(fptr==NULL)
-        {
-            printf("Trouble in opening file\n");
-            exit(1);
-        }
-        
-        printf("Enter type of property(villa | house | land)\n");
-        scanf("%s", ruser_ptype);
+        printf("Enter name to modify property\n");
+        scanf("%s", ruser_name);
 
-        system("cls");
-        printf("NAME\t\tContact no\tProperty type\tExtent(in sq yds)\t \bPlace\t\tCountry\n\n");
+        rewind(fptr);
 
-        while(fread(&u, size, 1, fptr)==1)
+        while (fread(&u, size, 1, fptr) == 1)
         {
-            if(strcmp(u.ptype, ruser_ptype)==0)
+            if (strcmp(u.name, ruser_name) == 0)
             {
-                printf("%s\t\t%ld\t%s\t\t%d\t\t\t%s\t\t%s\n\n",u.name, u.cnumber, u.ptype, u.ext,u.place, u.country);
+                printf("Enter new name:\n");
+                scanf("%s", u.name);
+
+                printf("Enter Contact number :\n ");
+                scanf("%ld", &u.cnumber);
+
+                printf("Enter Type(villa | house | land) : \n");
+                scanf("%s", &u.ptype);
+
+                printf("Enter Extent :\n ");
+                scanf("%d", &u.ext);
+
+                printf("Enter place or city :\n ");
+                scanf("%s", &u.place);
+
+                printf("Enter country :\n ");
+                scanf("%s", &u.country);
+
+                fseek(fptr, -size, SEEK_CUR);
+                fwrite(&u, size, 1, fptr);
+                break;
             }
         }
-        fclose(fptr);
-
-        printf("Want ro view another type of property ?\n\n");
-        printf("y/n");
+        printf("Want to modify another property ?\n");
+        printf("y/n\n");
         fflush(stdin);
-        scanf("%c",&another);
-
+        scanf("%c", &another);
     }
 }
